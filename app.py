@@ -21,6 +21,38 @@ model_path = os.path.join(os.path.dirname(__file__), "model", "label_maker.skops
 unknown_types = sio.get_untrusted_types(file=model_path)
 model = sio.load(model_path, trusted=unknown_types)
 
+# Define output keywords used in the model
+subj_terms = ['Administrative Law',
+               'Business Organizations Law',
+               'Civil Law and Procedure',
+               'Civil Rights and Discrimination',
+               'Commercial Law',
+               'Communications Law',
+               'Constitutional Law',
+               'Courts',
+               'Criminal Law and Procedure',
+               'Domestic Law',
+               'Education Law',
+               'Environmental Law',
+               'Health Law and Policy',
+               'Housing Law',
+               'Immigration Law',
+               'Insurance Law',
+               'Intellectual Property Law',
+               'International Law',
+               'Jurisdiction',
+               'Jurisprudence',
+               'Law and Society',
+               'Legal Profession',
+               'Legislation',
+               'National Security Law',
+               'Natural Resources Law',
+               'Science and Technology Law',
+               'Supreme Court of the United States',
+               'Taxation',
+               'Torts',
+               'Trade Regulation']
+
 # Load our docs and train our vectorizer
 doc_path = os.path.join(os.path.dirname(__file__), "data", "docs.csv")
 docs = []
@@ -83,7 +115,16 @@ def serve_index():
 # Define the prediction endpoint
 @app.post("/predict")
 async def predict(input: TextInput):
+    # Generate TFIDF
     data = doc_preprep_tfidf(input.abstract)
     tfidf = vectorizer.transform(data)
+    
+    # Preduct output using the model
     prediction = model.predict(tfidf)
-    return {"prediction": str(prediction)}
+
+    # Transform into list of keywords
+    df = pd.DataFrame(prediction, columns=col_names)
+    cols = df.columns[(df == 1).any)()].tolist()
+    prediction_string = ", ".join(cols)
+    # reutrn data
+    return {"prediction": str(prediction_string)}
