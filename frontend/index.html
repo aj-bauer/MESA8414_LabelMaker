@@ -62,7 +62,7 @@
 
   <form id="abstractForm">
     <label for="message">Article Abstract:</label>
-    <textarea name="message" id="message" style="width:400px; height:400px;"></textarea>
+    <textarea name="message" id="message" style="width:500px; height:400px;"></textarea>
 
     <button type="submit">Generate Subject Terms</button>
   </form>
@@ -76,9 +76,8 @@
       // Collect values
       const inputs = document.getElementById("message").value;
       console.log(inputs)
+      
       // Send request to backend API
-     
-
       try {
         const response = await fetch("https://mesa8414-label-maker.onrender.com/predict", {
           method: "POST",
@@ -92,7 +91,7 @@
         document.getElementById("output").textContent = "Subject Terms: " + data.prediction;
       } catch (error) {
         document.getElementById("output").textContent = "Error: " + error.message;
-        console.log(error)
+        console.log(response)
       }
     });
   </script>
