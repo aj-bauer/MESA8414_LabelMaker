@@ -84,20 +84,20 @@
           headers: {
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ abstract: inputs })
+          body: JSON.stringify({ "abstract": inputs })
         });
 
         const data = await response.json();
         if (data.error) {
-          document.getElementByID("output").textContent = "Response Error:" + data.error;
+          document.getElementById("output").textContent = "Response Error:" + data.error;
         } else if (data.prediction) {
           document.getElementById("output").textContent = "Subject Terms: " + data.prediction;
         } else {
           document.getElementById("output").textContent = "Something went horribly wrong."
         }
       } catch (error) {
-        document.getElementById("output").textContent = "Error: " + error.message;
-        console.log(error)
+          document.getElementById("output").textContent = "Error: " + error.message;
+          console.log(error)
       }
     });
   </script>
