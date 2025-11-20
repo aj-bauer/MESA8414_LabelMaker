@@ -127,17 +127,16 @@ async def predict(input: TextInput):
     tfidf = vectorizer.transform(data)
     
     # Preduct output using the model
+    prediction = model.predict(tfidf)
+
+    # Transform into list of keywords
     try:
-      prediction = model.predict(tfidf)
+      df = pd.DataFrame(prediction, columns=subj_terms)
+      cols = df.columns[(df == 1).any()].tolist()
+      prediction_string = ", ".join(cols)
     except Exception as e:
       return {'prediction_error': e}
-      
-    # Transform into list of keywords
-    df = pd.DataFrame(prediction, columns=col_names)
-    cols = df.columns[(df == 1).any()].tolist()
-    prediction_string = ", ".join(cols)
-    # return_body = jsonable_encoder(ModelOutput(prediction=prediction_string))
-  
+    
     # reutrn data
     return {'prediction': prediction_string}
     
