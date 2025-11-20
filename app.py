@@ -145,7 +145,7 @@ async def predict(input: TextInput):
     # prediction_string = ", ".join(cols)
   try:
     # Transform into list of keywords NOT using pandas
-    pred_array = np.array(prediction)
+    pred_array = np.array(prediction[0])
   except Exception as e:
     return {'error':'np.array'}
 
@@ -153,10 +153,10 @@ async def predict(input: TextInput):
     mask = (pred_array == 1)
     subj_shortlist = subj_array[mask]
   except Exception as e:
-    return {'error': mask}
+    return {'error': 'mask'}
 
   try:
-    prediction_string = ", ".join(subject_shortlist)
+    prediction_string = ", ".join(subj_shortlist)
   except Exception as e:
     return {'error':'string concat'}
     
