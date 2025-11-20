@@ -54,6 +54,7 @@ subj_terms = ['Administrative Law',
                'Taxation',
                'Torts',
                'Trade Regulation']
+subj_array = np.array(subj_terms)
 
 # Load our docs and train our vectorizer
 doc_path = os.path.join(os.path.dirname(__file__), "data", "docs.csv")
@@ -128,14 +129,17 @@ async def predict(input: TextInput):
     
     # Preduct output using the model
     prediction = model.predict(tfidf)
-
+    
     # Transform into list of keywords
-    try:
-      df = pd.DataFrame(prediction, columns=subj_terms)
-      cols = df.columns[(df == 1).any()].tolist()
-      prediction_string = ", ".join(cols)
-    except Exception as e:
-      return {'prediction_error': e}
+    # df = pd.DataFrame(prediction, columns=subj_terms)
+    # cols = df.columns[(df == 1).any()].tolist()
+    # prediction_string = ", ".join(cols)
+
+    # Transform into list of keywords NOT using pandas
+    pred_array = np.array(prediction)
+    mask = (pred_array == 1)
+    subj_shortlist = subj_array[mask]
+    prediction_string = ", ".join(subject_shortlist)
     
     # reutrn data
     return {'prediction': prediction_string}
