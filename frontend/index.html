@@ -91,6 +91,9 @@
         if (data.error) {
           document.getElementById("output").textContent = "Response Error:" + data.error;
           console.log(data.error)
+        } else if (data.prediction_error) {
+          document.getElementById("output").textContent = "Prediction Error:" + data.prediction_error;
+          console.log(data.prediction_error)
         } else if (data.prediction) {
           document.getElementById("output").textContent = "Subject Terms: " + data.prediction;
         } else {
